@@ -30,7 +30,7 @@ class SmurfForm extends Component {
             onChange={this.props.handleInputChange}
             placeholder="height"
             value={this.props.smurf.height}
-            type="number"
+            type="text"
             name="height"
           />
           <button type="submit">Add to the village</button>

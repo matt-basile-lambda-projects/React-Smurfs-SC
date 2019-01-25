@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Route, NavLink} from 'react-router-dom';
 
 import './App.css';
 import SmurfForm from './components/SmurfForm';
@@ -35,7 +36,9 @@ class App extends Component {
           age: '',
           height: ''
         }
-      });
+      })
+      
+      this.props.history.push("/");
     })
     .catch(err => console.log(err))
     // add code to create the smurf using the api
@@ -44,6 +47,16 @@ class App extends Component {
 
   handleInputChange = e => {
     e.persist();
+    if(e.target.name === 'height'){
+      this.setState(prevState => {
+        return {
+          smurf: {
+            ...prevState.smurf,
+            height: `${e.target.value}cm`
+          }
+        }
+      })
+    }
     this.setState(prevState => {
       return {
         smurf: {
@@ -59,12 +72,24 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <NavLink exact to="/">Smurfs</NavLink>
+        <NavLink to="/smurf-form">Add a Smurf</NavLink>
+        <Route 
+        exact path = "/"
+        render={ props =>(
+          <Smurfs {...props} smurfs={this.state.smurfs} />
+        )}
+        /> 
+        <Route 
+        path="/smurf-form"
+        render={ props =>(
         <SmurfForm 
+         {...props}
          smurf={this.state.smurf}
          addSmurf={this.addSmurf}
          handleInputChange={this.handleInputChange}
-         />
-        <Smurfs smurfs={this.state.smurfs} />
+        />)}/>
+        
       </div>
     );
   }
