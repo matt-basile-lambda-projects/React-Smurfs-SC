@@ -5,6 +5,7 @@ import { Route, NavLink} from 'react-router-dom';
 import './App.css';
 import SmurfForm from './components/SmurfForm';
 import Smurfs from './components/Smurfs';
+import Smurf from './components/Smurf'
 
 const cleanSmurf = {
   name: '',
@@ -21,7 +22,8 @@ class App extends Component {
         age: '',
         height: ''
       },
-      isUpdating: false
+      isUpdating: false,
+      id: null
     };
   }
   // Read
@@ -59,6 +61,10 @@ class App extends Component {
     this.setState({smurf: this.state.smurfs.find(smurf => smurf.id === id)});
     this.setState({isUpdating:true});
     this.props.history.push("/smurf-form")
+  }
+  changeID = (e, ID) =>{
+    e.preventDefault();
+    this.setState({id: ID });
   }
 
   updateSmurf = () =>{
@@ -111,6 +117,7 @@ class App extends Component {
         render={ props =>(
           <Smurfs 
           {...props}
+          changeID={this.changeID}
           populateSmurfForm={this.populateSmurfForm}
           smurf={this.state.smurf}
           deleteSmurf={this.deleteSmurf}
@@ -128,7 +135,15 @@ class App extends Component {
          addSmurf={this.addSmurf}
          handleInputChange={this.handleInputChange}
         />)}/>
+         <Route 
+        path='/smurf/:id' 
+        render={props=>
+        <Smurf {...props} 
+        smurfs={this.state.smurfs}
         
+        />}
+        />
+
       </div>
     );
   }

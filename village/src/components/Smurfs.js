@@ -10,6 +10,7 @@ class Smurfs extends Component {
         <h1>Smurf Village</h1>
         <ul>
           {this.props.smurfs.map(smurf => {
+            console.log(smurf)
             return (
               <Smurf
                 name={smurf.name}
@@ -20,9 +21,10 @@ class Smurfs extends Component {
                 deleteSmurf={this.props.deleteSmurf}
                 populateSmurfForm={this.props.populateSmurfForm}
               />
-            );
+              );
           })}
         </ul>
+       
       </div>
     );
   }
