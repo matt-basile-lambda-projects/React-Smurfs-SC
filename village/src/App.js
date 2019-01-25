@@ -18,12 +18,13 @@ class App extends Component {
       }
     };
   }
+  // Read
   componentDidMount(){
     axios.get('http://localhost:3333/smurfs')
     .then(res => this.setState({smurfs: res.data}))
     .catch(err => console.log(err))
   }
-
+  // Create
   addSmurf = event => {
     event.preventDefault();
     axios
@@ -43,6 +44,16 @@ class App extends Component {
     .catch(err => console.log(err))
     // add code to create the smurf using the api
   }
+  // Delete
+  deleteSmurf = id =>{
+    axios
+    .delete(`http://localhost:3333/smurfs/${id}`)
+    .then(res => this.setState({
+      smurfs: res.data
+    }))
+    .catch(err => console.log(err))
+  }
+
 
 
   handleInputChange = e => {
@@ -77,7 +88,11 @@ class App extends Component {
         <Route 
         exact path = "/"
         render={ props =>(
-          <Smurfs {...props} smurfs={this.state.smurfs} />
+          <Smurfs 
+          {...props}
+          smurf={this.state.smurf}
+          deleteSmurf={this.deleteSmurf}
+          smurfs={this.state.smurfs} />
         )}
         /> 
         <Route 
