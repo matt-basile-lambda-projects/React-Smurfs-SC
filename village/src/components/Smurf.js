@@ -8,6 +8,7 @@ const Smurf = props => {
       <strong>{props.height} tall</strong>
       <p>{props.age} smurf years old</p>
       <button onClick={() => props.deleteSmurf(props.id)}>Remove Smurf</button>
+      <button onClick={ e => props.populateSmurfForm(e, props.id)}>Morph Smurf</button>
     </div>
   );
 };

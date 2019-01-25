@@ -6,6 +6,11 @@ import './App.css';
 import SmurfForm from './components/SmurfForm';
 import Smurfs from './components/Smurfs';
 
+const cleanSmurf = {
+  name: '',
+  age: '',
+  height: '',
+}
 class App extends Component {
   constructor(props) {
     super(props);
@@ -15,7 +20,8 @@ class App extends Component {
         name: '',
         age: '',
         height: ''
-      }
+      },
+      isUpdating: false
     };
   }
   // Read
@@ -25,23 +31,17 @@ class App extends Component {
     .catch(err => console.log(err))
   }
   // Create
-  addSmurf = event => {
-    event.preventDefault();
+  addSmurf = () => {
     axios
     .post("http://localhost:3333/smurfs", this.state.smurf)
     .then(res => {
       this.setState({
         smurfs: res.data,
-        smurf:{
-          name: '',
-          age: '',
-          height: ''
-        }
+        smurf: cleanSmurf,
       })
-      
       this.props.history.push("/");
     })
-    .catch(err => console.log(err))
+    .catch(err => console.log(err.message))
     // add code to create the smurf using the api
   }
   // Delete
@@ -51,6 +51,27 @@ class App extends Component {
     .then(res => this.setState({
       smurfs: res.data
     }))
+    .catch(err => console.log(err))
+  }
+
+  populateSmurfForm = (e, id) =>{
+    e.preventDefault();
+    this.setState({smurf: this.state.smurfs.find(smurf => smurf.id === id)});
+    this.setState({isUpdating:true});
+    this.props.history.push("/smurf-form")
+  }
+
+  updateSmurf = () =>{
+    console.log(this.state.smurf)
+    axios.put(`http://localhost:3333/smurfs/${this.state.smurf.id}`, this.state.smurf)
+    .then(res => {
+      this.setState({
+        smurfs: res.data,
+        isUpdating: false,
+        smurf: cleanSmurf
+      })
+      this.props.history.push("/")
+    })
     .catch(err => console.log(err))
   }
 
@@ -90,6 +111,7 @@ class App extends Component {
         render={ props =>(
           <Smurfs 
           {...props}
+          populateSmurfForm={this.populateSmurfForm}
           smurf={this.state.smurf}
           deleteSmurf={this.deleteSmurf}
           smurfs={this.state.smurfs} />
@@ -100,6 +122,8 @@ class App extends Component {
         render={ props =>(
         <SmurfForm 
          {...props}
+         isUpdating ={this.state.isUpdating}
+         updateSmurf = {this.updateSmurf}
          smurf={this.state.smurf}
          addSmurf={this.addSmurf}
          handleInputChange={this.handleInputChange}
