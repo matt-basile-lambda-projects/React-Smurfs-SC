@@ -4,50 +4,45 @@ class SmurfForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      age: '',
-      height: ''
+      
     };
   }
-
-  addSmurf = event => {
-    event.preventDefault();
-    // add code to create the smurf using the api
-
-    this.setState({
-      name: '',
-      age: '',
-      height: ''
-    });
+  handleSubmit = (e) =>{
+    console.log('running')
+    e.preventDefault();
+    if(this.props.isUpdating){
+      this.props.updateSmurf();
+    } else{
+      this.props.addSmurf();
+    }
   }
-
-  handleInputChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
 
   render() {
     return (
       <div className="SmurfForm">
-        <form onSubmit={this.addSmurf}>
+        <form onSubmit={this.handleSubmit}>
           <input
-            onChange={this.handleInputChange}
+            onChange={this.props.handleInputChange}
             placeholder="name"
-            value={this.state.name}
+            value={this.props.smurf.name}
+            type="text"
             name="name"
           />
           <input
-            onChange={this.handleInputChange}
+            onChange={this.props.handleInputChange}
             placeholder="age"
-            value={this.state.age}
+            type="number"
+            value={this.props.smurf.age}
             name="age"
           />
           <input
-            onChange={this.handleInputChange}
+            onChange={this.props.handleInputChange}
             placeholder="height"
-            value={this.state.height}
+            value={this.props.smurf.height}
+            type="text"
             name="height"
           />
-          <button type="submit">Add to the village</button>
+          <button type="submit">{this.props.isUpdating ? 'Update Smurf' : 'Add to the village'}</button>
         </form>
       </div>
     );
